@@ -35,8 +35,8 @@ public class LinkedListDequeTest {
 	  * && is the "and" operation. */
 	public static void addIsEmptySizeTest() {
 		System.out.println("Running add/isEmpty/Size test.");
-		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-		/*
+		//System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
+
 		LinkedListDeque<String> lld1 = new LinkedListDeque<String>();
 
 		boolean passed = checkEmpty(true, lld1.isEmpty());
@@ -58,7 +58,7 @@ public class LinkedListDequeTest {
 		lld1.printDeque();
 
 		printTestStatus(passed);
-		*/
+
 	}
 
 	/** Adds an item, then removes an item, and ensures that dll is empty afterwards. */
@@ -66,8 +66,8 @@ public class LinkedListDequeTest {
 
 		System.out.println("Running add/remove test.");
 
-		System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
-		/*
+		//System.out.println("Make sure to uncomment the lines below (and delete this print statement).");
+
 		LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
 		// should be empty 
 		boolean passed = checkEmpty(true, lld1.isEmpty());
@@ -81,12 +81,32 @@ public class LinkedListDequeTest {
 		passed = checkEmpty(true, lld1.isEmpty()) && passed;
 
 		printTestStatus(passed);
-		*/
+
 	}
+
+	/** Test get item and print item method */
+	public static void getPrintTest() {
+	    System.out.println("Running get/print test.");
+
+	    LinkedListDeque<Integer> lld1 = new LinkedListDeque<Integer>();
+	    lld1.addFirst(9);
+	    lld1.addFirst(7);
+	    lld1.addFirst(5);
+	    lld1.addFirst(3);
+	    lld1.printDeque();
+	    System.out.println();
+	    boolean passed = (lld1.get(0)==3) && (lld1.get(1)==5) && (lld1.get(2)==7) && (lld1.get(3)==9);
+	    passed = passed && (lld1.getRecursive(0)==3) && (lld1.getRecursive(1)==5)
+                            && (lld1.getRecursive(2)==7) && (lld1.getRecursive(3)==9);
+	    printTestStatus(passed);
+    }
+
+
 
 	public static void main(String[] args) {
 		System.out.println("Running tests.\n");
 		addIsEmptySizeTest();
 		addRemoveTest();
+		getPrintTest();
 	}
 } 

@@ -40,6 +40,15 @@ public class IntListTest {
      * Anything can happen to A.
      */
 
+    @Test(timeout = 1000)
+    public void testReverse() {
+        IntList L = IntList.list(1, 2, 3, 4, 5);
+        IntList L_reverse = IntList.list(5, 4, 3, 2, 1);
+        assertEquals(L_reverse, L.reverse());
+
+
+    }
+
     @Test
     public void testSquareListRecursive() {
         IntList L = IntList.list(1, 2, 3);

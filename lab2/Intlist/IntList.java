@@ -81,8 +81,21 @@ public class IntList {
 
     public static IntList dcatenate(IntList A, IntList B) {
         //TODO:  fill in method
-        return null;
+        // if A is empty, return B
+        if (A == null) {
+            return B;
+        } else {
+            // else, concatenate A and B and return head
+            IntList result = A;
+            while (A.rest != null) {
+                A = A.rest;
+            }
+            A.rest = B;
+            return result;
+        }
     }
+
+
 
     /**
      * Returns a list consisting of the elements of A followed by the
@@ -90,9 +103,31 @@ public class IntList {
      */
     public static IntList catenate(IntList A, IntList B) {
         //TODO:  fill in method
-        return null;
+        // if A is empty, return B
+        if (A == null) {
+            return B;
+        } else {
+            // else, copy A and B and concatenate and return head
+            IntList result = new IntList(A.first, A.rest);
+            IntList p = result;
+            while (A.rest != null) {
+                A = A.rest;
+                p.rest = new IntList(A.first, A.rest);
+                p = p.rest;
+            }
+            while (B.rest != null) {
+                p.rest = new IntList(B.first, B.rest);
+                p = p.rest;
+                B = B.rest;
+            }
+            return result;
+        }
     }
 
+    /** Rewrite catenate using recursive method */
+    public static IntList catenateR(IntList A, IntList B) {
+        return null;
+    }
 
     /**
      * DO NOT MODIFY ANYTHING BELOW THIS LINE! Many of the concepts below here
@@ -210,6 +245,24 @@ public class IntList {
         }
         out.format(")");
         return out.toString();
+    }
+
+    /** Testing the codes for myself. */
+    public static void main(String[] args) {
+        IntList myList = IntList.list(0, 1, 2, 3);
+
+        int a = myList.first;
+        IntList b = myList.rest.rest.rest.rest;
+
+        IntListTest test = new IntListTest();
+        test.testList();
+        test.testdSquareList();
+        test.testSquareListRecursive();
+        test.testSquareListIterative();
+        test.testDcatenate();
+        test.testCatenate();
+
+
     }
 }
 
