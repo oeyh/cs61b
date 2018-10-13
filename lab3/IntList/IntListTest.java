@@ -43,8 +43,8 @@ public class IntListTest {
     @Test(timeout = 1000)
     public void testReverse() {
         IntList L = IntList.list(1, 2, 3, 4, 5);
-        IntList L_reverse = IntList.list(5, 4, 3, 2, 1);
-        assertEquals(L_reverse, L.reverse());
+        IntList R = IntList.list(5, 4, 3, 2, 1);
+        assertEquals(R, L.reverse());
 
 
     }
@@ -68,7 +68,7 @@ public class IntListTest {
 
     @Test
     public void testCatenate() {
-        IntList A = IntList.list(1,2,3);
+        IntList A = IntList.list(1, 2, 3);
         IntList B = IntList.list(4, 5, 6);
         IntList exp = IntList.list(1, 2, 3, 4, 5, 6);
         assertEquals(exp, IntList.catenate(A, B));
