@@ -21,6 +21,11 @@ public class GuitarHeroLite {
             }
 
         /* compute the superposition of samples */
+            /* since a single pluck and play does not last long,
+            after a couple of tic()'s, the values in the GuitarString buffer
+            will degraded to close to zero pretty soon. So the superposition is
+            mostly comprised of just one key that you just pressed.
+             */
             double sample = stringA.sample() + stringC.sample();
 
         /* play the sample on standard audio */
