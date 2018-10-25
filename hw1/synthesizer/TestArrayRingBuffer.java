@@ -23,6 +23,27 @@ public class TestArrayRingBuffer {
         arb.dequeue();
         assertEquals((Double) 15.1, arb.peek());
 
+        // test iterator
+        for (Double element : arb) {
+            System.out.print(element + " ");
+        }
+        System.out.println();
+
+        arb.enqueue(1.0);
+
+        for (Double element : arb) {
+            System.out.print(element + " ");
+        }
+        System.out.println();
+
+        // test nested iterations
+        int[] someInts = new int[]{1, 2, 3};
+        for (int x : someInts) {
+            for (int y: someInts) {
+                System.out.println("x: " + x +  ", y:" + y);
+            }
+        }
+
     }
 
     /** Calls tests for ArrayRingBuffer. */
