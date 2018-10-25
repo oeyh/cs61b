@@ -1,6 +1,10 @@
 package db;
 
+import org.junit.Test;
+
 public class TableTest {
+
+
 
     public static void main(String[] args) {
         // Test Cartesian Product
