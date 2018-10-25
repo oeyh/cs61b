@@ -16,8 +16,11 @@ public class DatabaseTest {
             for (String col : t1.columnNames) {
                 System.out.print(r.rowData.get(col) + ",");
             }
+            System.out.println(r);
             System.out.println();
         }
+
+
     }
 
 

@@ -1,8 +1,22 @@
 package db;
 
 import java.util.*;
+import org.junit.Test;
 
 public class JustSomeTests {
+
+    /** Test String methods */
+    @Test
+    public void stringTest() {
+        Set<String> set1 = new LinkedHashSet<>();
+        set1.add("Hello");
+        set1.add("World");
+        set1.add("Test");
+
+        String jointest = String.join(",", set1);
+        System.out.println(jointest);
+    }
+
 
     public static void main(String[] args) {
         HashMap<String, Object> map1 = new HashMap<>();
