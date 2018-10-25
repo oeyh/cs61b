@@ -86,10 +86,10 @@ public class Table {
 
         // add variable types
         for (String name : allVar) {
-            if (nameVsType.get(name) == null) {
-                allVarTypes.add(anotherTable.nameVsType.get(name));
-            } else {
+            if (columnNames.contains(name)) {
                 allVarTypes.add(nameVsType.get(name));
+            } else {
+                allVarTypes.add(anotherTable.nameVsType.get(name));
             }
         }
 
