@@ -86,7 +86,11 @@ public class Table {
 
         // add variable types
         for (String name : allVar) {
-            allVarTypes.add(nameVsType.get(name));
+            if (nameVsType.get(name) == null) {
+                allVarTypes.add(anotherTable.nameVsType.get(name));
+            } else {
+                allVarTypes.add(nameVsType.get(name));
+            }
         }
 
         // If no common variables, should return Cartesian Product of the 2 tables
@@ -141,15 +145,14 @@ public class Table {
         int k = 0;
         for (String name : columnNames) {
             columnNamesAndTypes[k] = (name + " " + columnTypes.get(k));
+            k += 1;
         }
 
         String returnString = String.join(",", columnNamesAndTypes);
         returnString += "\n";
 
         for (Row r : rows) {
-            for (String name : columnNames) {
-
-            }
+            returnString += r.toString();
         }
         return returnString;
     }
