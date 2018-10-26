@@ -1,5 +1,8 @@
 package db;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.*;
 import edu.princeton.cs.algs4.*;
 
@@ -75,7 +78,7 @@ public class Database {
                 } else if (columnTypes.get(k).equals("float")) {
                     columnValuesCast[k] = Float.parseFloat(value);
                 } else {
-                    columnValuesCast[k] = value;
+                    columnValuesCast[k] = value.substring(1, value.length()-1);
                 }
                 k += 1;
             }
@@ -87,5 +90,13 @@ public class Database {
         // Add new table to dataBase
         String tableName = tableFilename.split("\\.")[0]; // strip suffix from filename
         dataBase.put(tableName, newTable);
+    }
+
+    /** Store the given table to file named by the table's name. */
+    public void storeTable(String tableName) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter(tableName + ".tbl"));
+        writer.write(dataBase.get(tableName).toString());
+        writer.close();
+
     }
 }

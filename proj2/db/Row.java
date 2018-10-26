@@ -5,10 +5,10 @@ import java.util.*;
 /** Row class object holds the data of an Row and performs row operations */
 public class Row {
 
-    Map<String, String> nameVsType;
+    private Map<String, String> nameVsType;
     private Set<String> columnNames;
     private int totalCols;
-    Map<String, Object> rowData;
+    private Map<String, Object> rowData;
 
     /** Constructor */
     public Row(String[] colNames, String[] colTypes, Object[] colValues) {
@@ -87,7 +87,17 @@ public class Row {
         List<String> orderedColumnValues = new ArrayList<>(totalCols);
 
         for (String name : columnNames) {
-            orderedColumnValues.add(rowData.get(name).toString());
+            switch (nameVsType.get(name)) {
+                case "float":
+                    orderedColumnValues.add(String.format("%.3f", Float.parseFloat(rowData.get(name).toString())));
+                    break;
+                case "string":
+                    orderedColumnValues.add(String.format("'%s'", rowData.get(name).toString()));
+                    break;
+                default:
+                    orderedColumnValues.add(rowData.get(name).toString());
+                    break;
+            }
         }
 
         return String.join(",", orderedColumnValues) + "\n";

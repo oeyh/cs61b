@@ -23,7 +23,7 @@ public class Table {
         totalCols = variableNames.length;
         rows = new LinkedList<>();
 
-        nameVsType = new HashMap<>();
+        nameVsType = new LinkedHashMap<>();
         int k = 0;
         for (String name : columnNames) {
             nameVsType.put(name, columnTypes.get(k));
@@ -48,7 +48,7 @@ public class Table {
         totalCols = variableNames.size();
         rows = new LinkedList<>();
 
-        nameVsType = new HashMap<>();
+        nameVsType = new LinkedHashMap<>();
         int k = 0;
         for (String name : columnNames) {
             nameVsType.put(name, columnTypes.get(k));
@@ -205,6 +205,8 @@ public class Table {
         for (Row r : rows) {
             sb.append(r.toString());
         }
-        return sb.toString();
+        String returnString = sb.toString();
+        // remove trailing newline and return
+        return returnString.substring(0, returnString.length() - 1);
     }
 }
