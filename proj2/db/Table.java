@@ -10,6 +10,7 @@ public class Table {
     Set<String> columnNames;
     List<String> columnTypes;
     List<Row> rows;  // all rows in the table form a linked list
+    // TODO: try rewriting nameVsType as a Map, more specifically, a LinkedHashMap.
     Map<String, String> nameVsType;
     int totalRows;
     int totalCols;
