@@ -73,7 +73,7 @@ public class Table {
 
         return returnTable;
     }
-    
+
 
     /** Forms the Cartesian Product of this table and another table,
      *  and return the new table.

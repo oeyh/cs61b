@@ -10,20 +10,7 @@ public class Row {
     private int totalCols;
     private Map<String, Object> rowData;
 
-    /** Constructor */
-    public Row(String[] colNames, String[] colTypes, Object[] colValues) {
-        columnNames = new LinkedHashSet<>(Arrays.asList(colNames));
-        totalCols = colNames.length;
-
-        // populate rowData
-        int k = 0;
-        for (String name : columnNames) {
-            rowData.put(name, colValues[k]);
-            k += 1;
-        }
-    }
-
-    /** Constructor 2, given an existing table object and an array of values */
+    /** Constructor, given an existing table object and an array of values */
     public Row(Table tbl, Object[] colValues) {
         nameVsType = tbl.nameVsType;
         columnNames = tbl.columnNames;
@@ -38,7 +25,7 @@ public class Row {
         }
     }
 
-    /** Constructor 3, given Sets and Map */
+    /** Constructor, given Maps */
     public Row(Map<String, String> nameAndType, Map<String, Object> rowMap) {
         nameVsType = nameAndType;
         columnNames = new LinkedHashSet<>(nameAndType.keySet());
