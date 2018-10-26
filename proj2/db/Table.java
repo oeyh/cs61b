@@ -15,47 +15,6 @@ public class Table {
     int totalRows;
     int totalCols;
 
-//    /** Constructor, given array of variable names. */
-//    public Table(String[] variableNames, String[] variableTypes) {
-//        columnNames = new LinkedHashSet<>(Arrays.asList(variableNames)); // use linkedhashset because it has order
-//        columnTypes = new ArrayList<>(Arrays.asList(variableTypes));
-//        totalRows = 0;
-//        totalCols = variableNames.length;
-//        rows = new LinkedList<>();
-//
-//        nameVsType = new LinkedHashMap<>();
-//        int k = 0;
-//        for (String name : columnNames) {
-//            nameVsType.put(name, columnTypes.get(k));
-//            k += 1;
-//        }
-//    }
-
-//    /** Constructor, given set of variable names. */
-//    public Table(Set<String> variableNames, List<String> variableTypes) {
-//        columnNames = new LinkedHashSet<>(variableNames); // use linkedhashset because it has order
-//        columnTypes = new ArrayList<>(variableTypes);
-//        totalRows = 0;
-//        totalCols = variableNames.size();
-//        rows = new LinkedList<>();
-//    }
-
-//    /** Constructor, given set of variable names. */
-//    public Table(Set<String> variableNames, List<String> variableTypes) {
-//        columnNames = new LinkedHashSet<>(variableNames); // use linkedhashset because it has order
-//        columnTypes = new ArrayList<>(variableTypes);
-//        totalRows = 0;
-//        totalCols = variableNames.size();
-//        rows = new LinkedList<>();
-//
-//        nameVsType = new LinkedHashMap<>();
-//        int k = 0;
-//        for (String name : columnNames) {
-//            nameVsType.put(name, columnTypes.get(k));
-//            k += 1;
-//        }
-//    }
-
     /** Constructor, given set of variable names. */
     public Table(Map<String, String> namesAndTypes) {
         nameVsType = new LinkedHashMap<>(namesAndTypes);
@@ -114,58 +73,7 @@ public class Table {
 
         return returnTable;
     }
-
-    // original join method
-
-//    public Table join(Table anotherTable) {
-//        // Arrange variables for the combined table.
-//        // Common variables, then variables from this, then var from anotherTable
-//        Set<String> commonVar = new LinkedHashSet<>();
-//        List<String> commonVarTypes = new ArrayList<>();
-//        Set<String> allVar = new LinkedHashSet<>();
-//        List<String> allVarTypes = new ArrayList<>();
-//
-//        for (String name : columnNames) {
-//            if (anotherTable.columnNames.contains(name)) {
-//                commonVar.add(name);
-//                commonVarTypes.add(nameVsType.get(name));
-//                allVar.add(name);
-//            }
-//        }
-//        // Now only common variables are in allVar.
-//        // Add the rest of variables in order
-//        allVar.addAll(columnNames);
-//        allVar.addAll(anotherTable.columnNames);
-//
-//        // add variable types
-//        for (String name : allVar) {
-//            if (columnNames.contains(name)) {
-//                allVarTypes.add(nameVsType.get(name));
-//            } else {
-//                allVarTypes.add(anotherTable.nameVsType.get(name));
-//            }
-//        }
-//
-//        // If no common variables, should return Cartesian Product of the 2 tables
-//        if (commonVar.size() == 0) {
-//            return cartesianProduct(anotherTable);
-//        }
-//        // Otherwise, try to merge the two tables
-//        // Create a new table with all variables
-//        Table returnTable = new Table(allVar, allVarTypes);
-//
-//        // Merge all rows
-//        for (Row r1 : rows) {
-//            for (Row r2 : anotherTable.rows) {
-//                Row mergedRow = r1.MergeRows(r2, commonVar, commonVarTypes, allVar, allVarTypes);
-//                if (mergedRow != null) {
-//                    returnTable.addRow(mergedRow);
-//                }
-//            }
-//        }
-//
-//        return returnTable;
-//    }
+    
 
     /** Forms the Cartesian Product of this table and another table,
      *  and return the new table.
