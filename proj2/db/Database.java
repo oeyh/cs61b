@@ -24,17 +24,15 @@ public class Database {
     /** Create a new table and add to database. */
     public void createTable(String tableName, String[] columnAndTypeNames) {
         // Parse column names and types
-        Set<String> columnNames = new LinkedHashSet<>();
-        List<String> columnTypes = new ArrayList<>();
+        Map<String, String> nameAndTypes = new LinkedHashMap<>();
 
         for (String columnAndType : columnAndTypeNames) {
             String[] nt = columnAndType.split(" ");
-            columnNames.add(nt[0]);
-            columnTypes.add(nt[1]);
+            nameAndTypes.put(nt[0], nt[1]);
         }
 
         // create new table with column names and types
-        Table newTable = new Table(columnNames, columnTypes);
+        Table newTable = new Table(nameAndTypes);
 
         // Add new table to dataBase
         dataBase.put(tableName, newTable);
@@ -54,17 +52,15 @@ public class Database {
 
         // Parse column names and types
         // TODO: make this a helper method, maybe a static method in Table class
-        Set<String> columnNames = new LinkedHashSet<>();
-        List<String> columnTypes = new ArrayList<>();
+        Map<String, String> nameAndTypes = new LinkedHashMap<>();
 
         for (String columnAndType : columnAndTypeNames) {
             String[] nt = columnAndType.split(" ");
-            columnNames.add(nt[0]);
-            columnTypes.add(nt[1]);
+            nameAndTypes.put(nt[0], nt[1]);
         }
 
         // create new table with column names and types
-        Table newTable = new Table(columnNames, columnTypes);
+        Table newTable = new Table(nameAndTypes);
 
 
         while (!in.isEmpty()) {
@@ -72,13 +68,13 @@ public class Database {
             // TODO: casting to int, float or keep as string
             Object[] columnValuesCast = new Object[columnValues.length];
             int k = 0;
-            for (String value : columnValues) {
-                if (columnTypes.get(k).equals("int")) {
-                    columnValuesCast[k] = Integer.parseInt(value);
-                } else if (columnTypes.get(k).equals("float")) {
-                    columnValuesCast[k] = Float.parseFloat(value);
+            for (String name : nameAndTypes.keySet()) {
+                if (nameAndTypes.get(name).equals("int")) {
+                    columnValuesCast[k] = Integer.parseInt(columnValues[k]);
+                } else if (nameAndTypes.get(name).equals("float")) {
+                    columnValuesCast[k] = Float.parseFloat(columnValues[k]);
                 } else {
-                    columnValuesCast[k] = value.substring(1, value.length()-1);
+                    columnValuesCast[k] = columnValues[k].substring(1, columnValues[k].length()-1);
                 }
                 k += 1;
             }
@@ -93,10 +89,47 @@ public class Database {
     }
 
     /** Store the given table to file named by the table's name. */
-    public void storeTable(String tableName) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(tableName + ".tbl"));
-        writer.write(dataBase.get(tableName).toString());
-        writer.close();
+    public String storeTable(String tableName) throws IOException {
+        try {
+            BufferedWriter writer = new BufferedWriter(new FileWriter(tableName + ".tbl"));
+            writer.write(dataBase.get(tableName).toString());
+            writer.close();
+            return "";
+        }
+        catch (IOException e) {
+            return "Cannot write to file. \n";
+        }
 
     }
+
+    /** Deletes the table with given name from database.
+     * return empty string on success and error message if fails. */
+    public String dropTable(String tableName) {
+        if (dataBase.remove(tableName) == null) {
+            return "No such table in the database. \n";
+        }
+        return "";
+    }
+
+    /** Inserts a row into a specified table */
+    public void insertRow(String tableName, String valueString) {
+        Table tbl = dataBase.get(tableName);
+        Object[] columnValuesCast = new Object[tbl.totalCols];
+
+        String[] valueArray = valueString.split("\\s*,\\s*");
+        int k = 0;
+        for (String name : tbl.nameVsType.keySet()) {
+            if (tbl.nameVsType.get(name).equals("int")) {
+                columnValuesCast[k] = Integer.parseInt(valueArray[k]);
+            } else if (tbl.nameVsType.get(name).equals("float")) {
+                columnValuesCast[k] = Float.parseFloat(valueArray[k]);
+            } else {
+                columnValuesCast[k] = valueArray[k].substring(1, valueArray[k].length()-1);
+            }
+            k += 1;
+        }
+        // add row to table
+        tbl.addRow(new Row(tbl, columnValuesCast));
+    }
+
 }

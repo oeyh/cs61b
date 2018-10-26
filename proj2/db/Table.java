@@ -15,21 +15,21 @@ public class Table {
     int totalRows;
     int totalCols;
 
-    /** Constructor, given array of variable names. */
-    public Table(String[] variableNames, String[] variableTypes) {
-        columnNames = new LinkedHashSet<>(Arrays.asList(variableNames)); // use linkedhashset because it has order
-        columnTypes = new ArrayList<>(Arrays.asList(variableTypes));
-        totalRows = 0;
-        totalCols = variableNames.length;
-        rows = new LinkedList<>();
-
-        nameVsType = new LinkedHashMap<>();
-        int k = 0;
-        for (String name : columnNames) {
-            nameVsType.put(name, columnTypes.get(k));
-            k += 1;
-        }
-    }
+//    /** Constructor, given array of variable names. */
+//    public Table(String[] variableNames, String[] variableTypes) {
+//        columnNames = new LinkedHashSet<>(Arrays.asList(variableNames)); // use linkedhashset because it has order
+//        columnTypes = new ArrayList<>(Arrays.asList(variableTypes));
+//        totalRows = 0;
+//        totalCols = variableNames.length;
+//        rows = new LinkedList<>();
+//
+//        nameVsType = new LinkedHashMap<>();
+//        int k = 0;
+//        for (String name : columnNames) {
+//            nameVsType.put(name, columnTypes.get(k));
+//            k += 1;
+//        }
+//    }
 
 //    /** Constructor, given set of variable names. */
 //    public Table(Set<String> variableNames, List<String> variableTypes) {
@@ -40,21 +40,21 @@ public class Table {
 //        rows = new LinkedList<>();
 //    }
 
-    /** Constructor, given set of variable names. */
-    public Table(Set<String> variableNames, List<String> variableTypes) {
-        columnNames = new LinkedHashSet<>(variableNames); // use linkedhashset because it has order
-        columnTypes = new ArrayList<>(variableTypes);
-        totalRows = 0;
-        totalCols = variableNames.size();
-        rows = new LinkedList<>();
-
-        nameVsType = new LinkedHashMap<>();
-        int k = 0;
-        for (String name : columnNames) {
-            nameVsType.put(name, columnTypes.get(k));
-            k += 1;
-        }
-    }
+//    /** Constructor, given set of variable names. */
+//    public Table(Set<String> variableNames, List<String> variableTypes) {
+//        columnNames = new LinkedHashSet<>(variableNames); // use linkedhashset because it has order
+//        columnTypes = new ArrayList<>(variableTypes);
+//        totalRows = 0;
+//        totalCols = variableNames.size();
+//        rows = new LinkedList<>();
+//
+//        nameVsType = new LinkedHashMap<>();
+//        int k = 0;
+//        for (String name : columnNames) {
+//            nameVsType.put(name, columnTypes.get(k));
+//            k += 1;
+//        }
+//    }
 
     /** Constructor, given set of variable names. */
     public Table(Map<String, String> namesAndTypes) {
