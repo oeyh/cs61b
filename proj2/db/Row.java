@@ -4,17 +4,16 @@ import java.util.*;
 
 /** Row class object holds the data of an Row and performs row operations */
 public class Row {
-    private Set<String> columnNames;
-    private List<String> columnTypes;
-    private int totalColumns;
 
+    Map<String, String> nameVsType;
+    private Set<String> columnNames;
+    private int totalCols;
     Map<String, Object> rowData;
 
     /** Constructor */
     public Row(String[] colNames, String[] colTypes, Object[] colValues) {
         columnNames = new LinkedHashSet<>(Arrays.asList(colNames));
-        columnTypes = new ArrayList<>(Arrays.asList(colTypes));
-        totalColumns = colNames.length;
+        totalCols = colNames.length;
 
         // populate rowData
         int k = 0;
@@ -26,58 +25,58 @@ public class Row {
 
     /** Constructor 2, given an existing table object and an array of values */
     public Row(Table tbl, Object[] colValues) {
+        nameVsType = tbl.nameVsType;
         columnNames = tbl.columnNames;
-        columnTypes = tbl.columnTypes;
-        totalColumns = columnNames.size();
-        rowData = new HashMap<>();
+        totalCols = columnNames.size();
+        rowData = new LinkedHashMap<>();
 
         // populate rowData
         int k = 0;
-        for (String name : columnNames) {
+        for (String name : nameVsType.keySet()) {
             rowData.put(name, colValues[k]);
             k += 1;
         }
     }
 
     /** Constructor 3, given Sets and Map */
-    public Row(Set<String> colNames, List<String> colTypes, Map<String, Object> rowMap) {
-        columnNames = colNames;
-        columnTypes = colTypes;
-        totalColumns = columnNames.size();
+    public Row(Map<String, String> nameAndType, Map<String, Object> rowMap) {
+        nameVsType = nameAndType;
+        columnNames = new LinkedHashSet<>(nameAndType.keySet());
+        totalCols = columnNames.size();
 
         // populate rowData
         rowData = rowMap;
     }
 
     /** Merge this row with another row, given that the two rows have one or more common variables */
-    public Row MergeRows(Row anotherRow, Set<String> commonVariables, List<String> commonVarTypes, Set<String> allVariables,
-                         List<String> allVarTypes) {
+    public Row MergeRows(Row anotherRow, Map<String, String> commonNameAndType, Map<String, String> allNameAndType) {
         // Check if the commonVariables in both tables match with each other
         boolean matched = true;
-        for (String var : commonVariables) {
+        for (String var : commonNameAndType.keySet()) {
             matched = matched && (rowData.get(var).equals(anotherRow.rowData.get(var)));
         }
 
         // If match, merge the two rows and return result in a new row
         if (matched) {
-            Map<String, Object> mergedRowMaps = new HashMap<>(rowData);
+            Map<String, Object> mergedRowMaps = new LinkedHashMap<>(rowData);
             mergedRowMaps.putAll(anotherRow.rowData);
 
-            return new Row(allVariables, allVarTypes, mergedRowMaps);
+            return new Row(allNameAndType, mergedRowMaps);
         }
         return null;
 
     }
 
+    // Todo: see if both merge method can be merged.
     /** Merge this row with another row, given that the two rows don't have common variables */
-    public Row MergeIndependentRows(Row anotherRow, Set<String> allVariables, List<String> allVarTypes) {
+    public Row MergeIndependentRows(Row anotherRow, Map<String, String> allNameAndType) {
 
         // Merge row maps
-        Map<String, Object> mergedRowMaps = new HashMap<>(rowData);
+        Map<String, Object> mergedRowMaps = new LinkedHashMap<>(rowData);
         mergedRowMaps.putAll(anotherRow.rowData);
 
         // If match, merge the two rows and return result in a new row
-        return new Row(allVariables, allVarTypes, mergedRowMaps);
+        return new Row(allNameAndType, mergedRowMaps);
 
     }
 
@@ -85,12 +84,10 @@ public class Row {
     @Override
     public String toString() {
 
-        String[] orderedColumnValues = new String[totalColumns];
+        List<String> orderedColumnValues = new ArrayList<>(totalCols);
 
-        int k = 0;
         for (String name : columnNames) {
-            orderedColumnValues[k] = rowData.get(name).toString();
-            k += 1;
+            orderedColumnValues.add(rowData.get(name).toString());
         }
 
         return String.join(",", orderedColumnValues) + "\n";

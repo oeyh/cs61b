@@ -56,6 +56,16 @@ public class Table {
         }
     }
 
+    /** Constructor, given set of variable names. */
+    public Table(Map<String, String> namesAndTypes) {
+        nameVsType = new LinkedHashMap<>(namesAndTypes);
+        rows = new LinkedList<>();
+        totalRows = 0;
+        totalCols = nameVsType.size();
+        // Fixme: columnNames may not be needed.
+        columnNames = new LinkedHashSet<>(nameVsType.keySet());
+    }
+
     /** Add a row to the end of the table */
     public void addRow(Row rowData) {
         rows.add(rowData);
@@ -68,44 +78,34 @@ public class Table {
     public Table join(Table anotherTable) {
         // Arrange variables for the combined table.
         // Common variables, then variables from this, then var from anotherTable
-        Set<String> commonVar = new LinkedHashSet<>();
-        List<String> commonVarTypes = new ArrayList<>();
-        Set<String> allVar = new LinkedHashSet<>();
-        List<String> allVarTypes = new ArrayList<>();
+        Map<String, String> commonNameAndType = new LinkedHashMap<>();
+        Map<String, String> allNameAndType = new LinkedHashMap<>();
 
-        for (String name : columnNames) {
-            if (anotherTable.columnNames.contains(name)) {
-                commonVar.add(name);
-                commonVarTypes.add(nameVsType.get(name));
-                allVar.add(name);
+        for (String name : nameVsType.keySet()) {
+            if (anotherTable.nameVsType.containsKey(name)) {
+                commonNameAndType.put(name, nameVsType.get(name));
+                allNameAndType.put(name, nameVsType.get(name));
             }
         }
         // Now only common variables are in allVar.
         // Add the rest of variables in order
-        allVar.addAll(columnNames);
-        allVar.addAll(anotherTable.columnNames);
-
-        // add variable types
-        for (String name : allVar) {
-            if (columnNames.contains(name)) {
-                allVarTypes.add(nameVsType.get(name));
-            } else {
-                allVarTypes.add(anotherTable.nameVsType.get(name));
-            }
-        }
+        // FIXME: New value will replace old value if key exists, but order should be maintained. If not as expected, fix me
+        allNameAndType.putAll(nameVsType);
+        allNameAndType.putAll(anotherTable.nameVsType);
 
         // If no common variables, should return Cartesian Product of the 2 tables
-        if (commonVar.size() == 0) {
+        if (commonNameAndType.size() == 0) {
             return cartesianProduct(anotherTable);
         }
+
         // Otherwise, try to merge the two tables
         // Create a new table with all variables
-        Table returnTable = new Table(allVar, allVarTypes);
+        Table returnTable = new Table(allNameAndType);
 
         // Merge all rows
         for (Row r1 : rows) {
             for (Row r2 : anotherTable.rows) {
-                Row mergedRow = r1.MergeRows(r2, commonVar, commonVarTypes, allVar, allVarTypes);
+                Row mergedRow = r1.MergeRows(r2, commonNameAndType, allNameAndType);
                 if (mergedRow != null) {
                     returnTable.addRow(mergedRow);
                 }
@@ -115,22 +115,73 @@ public class Table {
         return returnTable;
     }
 
+    // original join method
+
+//    public Table join(Table anotherTable) {
+//        // Arrange variables for the combined table.
+//        // Common variables, then variables from this, then var from anotherTable
+//        Set<String> commonVar = new LinkedHashSet<>();
+//        List<String> commonVarTypes = new ArrayList<>();
+//        Set<String> allVar = new LinkedHashSet<>();
+//        List<String> allVarTypes = new ArrayList<>();
+//
+//        for (String name : columnNames) {
+//            if (anotherTable.columnNames.contains(name)) {
+//                commonVar.add(name);
+//                commonVarTypes.add(nameVsType.get(name));
+//                allVar.add(name);
+//            }
+//        }
+//        // Now only common variables are in allVar.
+//        // Add the rest of variables in order
+//        allVar.addAll(columnNames);
+//        allVar.addAll(anotherTable.columnNames);
+//
+//        // add variable types
+//        for (String name : allVar) {
+//            if (columnNames.contains(name)) {
+//                allVarTypes.add(nameVsType.get(name));
+//            } else {
+//                allVarTypes.add(anotherTable.nameVsType.get(name));
+//            }
+//        }
+//
+//        // If no common variables, should return Cartesian Product of the 2 tables
+//        if (commonVar.size() == 0) {
+//            return cartesianProduct(anotherTable);
+//        }
+//        // Otherwise, try to merge the two tables
+//        // Create a new table with all variables
+//        Table returnTable = new Table(allVar, allVarTypes);
+//
+//        // Merge all rows
+//        for (Row r1 : rows) {
+//            for (Row r2 : anotherTable.rows) {
+//                Row mergedRow = r1.MergeRows(r2, commonVar, commonVarTypes, allVar, allVarTypes);
+//                if (mergedRow != null) {
+//                    returnTable.addRow(mergedRow);
+//                }
+//            }
+//        }
+//
+//        return returnTable;
+//    }
+
     /** Forms the Cartesian Product of this table and another table,
      *  and return the new table.
      */
     public Table cartesianProduct(Table anotherTable) {
-        // create new Table
-        Set<String> allColumnNames = new LinkedHashSet<>(columnNames);
-        List<String> allColumnTypes = new ArrayList<>(columnTypes);
-        allColumnNames.addAll(anotherTable.columnNames);
-        allColumnTypes.addAll(anotherTable.columnTypes);
+        // combine column variable maps
+        Map<String, String> allNameAndType = new LinkedHashMap<>(nameVsType);
+        allNameAndType.putAll(anotherTable.nameVsType);
 
-        Table returnTable = new Table(allColumnNames, allColumnTypes);
+        // creates new table
+        Table returnTable = new Table(allNameAndType);
 
         // merge rows and add to returnTable
         for (Row r1 : rows) {
             for (Row r2: anotherTable.rows) {
-                Row rowToAdd = r1.MergeIndependentRows(r2, allColumnNames, allColumnTypes);
+                Row rowToAdd = r1.MergeIndependentRows(r2, allNameAndType);
                 returnTable.addRow(rowToAdd);
             }
         }
@@ -142,19 +193,18 @@ public class Table {
     @Override
     public String toString() {
         // combine column names and types
-        String[] columnNamesAndTypes = new String[columnNames.size()];
-        int k = 0;
-        for (String name : columnNames) {
-            columnNamesAndTypes[k] = (name + " " + columnTypes.get(k));
-            k += 1;
+        List<String> columnNamesAndTypes = new ArrayList<>(totalCols);
+        for (String name : nameVsType.keySet()) {
+            columnNamesAndTypes.add(name + " " + nameVsType.get(name));
         }
 
-        String returnString = String.join(",", columnNamesAndTypes);
-        returnString += "\n";
-
+        // use StringBuilder due to multiple string concatenations
+        StringBuilder sb = new StringBuilder();
+        sb.append(String.join(",", columnNamesAndTypes));
+        sb.append("\n");
         for (Row r : rows) {
-            returnString += r.toString();
+            sb.append(r.toString());
         }
-        return returnString;
+        return sb.toString();
     }
 }
