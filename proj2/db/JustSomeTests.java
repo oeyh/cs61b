@@ -17,6 +17,20 @@ public class JustSomeTests {
         System.out.println(jointest);
     }
 
+//    /** Test try-catch on comparison between int, float and String */
+//    @Test
+//    public void compTest() {
+//        int i = 0;
+//        float j = 1.0;
+//        String
+//    }
+
+    @Test
+    public void testTest() {
+        Integer i = 5;
+        Float j = (float) i;
+    }
+
 
     public static void main(String[] args) {
         HashMap<String, Object> map1 = new HashMap<>();

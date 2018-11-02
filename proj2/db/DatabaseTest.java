@@ -3,6 +3,7 @@ package db;
 import org.junit.Test;
 
 import java.io.IOException;
+import java.util.Scanner;
 
 public class DatabaseTest {
 
@@ -33,7 +34,7 @@ public class DatabaseTest {
         // Test string type and float type
         db2.loadTable("float.tbl");
         Table f = db2.dataBase.get("float");
-        System.out.print(f);
+        System.out.println(f);
 
         db2.loadTable("fans.tbl");
         Table f2 = db2.dataBase.get("fans");
@@ -44,9 +45,9 @@ public class DatabaseTest {
 //        catch (IOException e) {
 //            System.out.println("IOException");
 //        }
-        System.out.println(f2);
-        db2.insertRow("fans", "'Yan','Hai','Houston Rockets'");
-        System.out.println(f2);
+//        System.out.println(f2);
+//        db2.insertRow("fans", "'Yan','Hai','Houston Rockets'");
+//        db2.printTable("fans");
 
 
 //        for (Row r : t1.rows) {
@@ -60,18 +61,62 @@ public class DatabaseTest {
 
     }
 
+    @Test
+    public void parseTest() {
+
+        Database db3 = new Database();
+        // read commandline input
+        Scanner scan = new Scanner(System.in);
+        String query = scan.nextLine();
+
+        while (!query.equals("exit")) {
+            db3.transact(query);
+            query = scan.nextLine();
+        }
+    }
+
+    @Test
+    public void selectTest() {
+        Database db5 = new Database();
+        db5.loadTable("records");
+        db5.printTable("records");
+        db5.select("Wins - Losses as WLD from records");
+
+    }
+
+    @Test
+    public void subTableTest() {
+        Database db5 = new Database();
+        db5.loadTable("records");
+        db5.dataBase.get("records").subTable("a > b");
+
+    }
+
 
     public static void main(String[] args) {
 
-        Database db1 = new Database();
+//        Database db1 = new Database();
+//
+//        String tableName = "myFirstTable";
+//        String columnsAndTypes = "X int, Y int, Z int";
+//        String[] ct = columnsAndTypes.trim().split("\\s*,\\s*");
+//
+//        db1.createTable(tableName, ct);
+//
+//        Database db2 = new Database();
+//        db2.loadTable("t1.tbl");
 
-        String tableName = "myFirstTable";
-        String columnsAndTypes = "X int, Y int, Z int";
-        String[] ct = columnsAndTypes.trim().split("\\s*,\\s*");
+        Database db3 = new Database();
+        final String PROMPT = "Type your command, 'exit' to quit >>> ";
+        System.out.print(PROMPT);
+        // read commandline input
+        Scanner scan = new Scanner(System.in);
+        String query = scan.nextLine();
 
-        db1.createTable(tableName, ct);
-
-        Database db2 = new Database();
-        db2.loadTable("t1.tbl");
+        while (!query.equals("exit")) {
+            db3.transact(query);
+            System.out.print(PROMPT);
+            query = scan.nextLine();
+        }
     }
 }
