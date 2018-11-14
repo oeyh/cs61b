@@ -12,7 +12,7 @@ public class Table {
     Set<String> columnNames;
     List<String> columnTypes;
     List<Row> rows;  // all rows in the table form a linked list
-    // TODO: try rewriting nameVsType as a Map, more specifically, a LinkedHashMap.
+    // rewriting nameVsType as a Map, more specifically, a LinkedHashMap.
     Map<String, String> nameVsType;
     int totalRows;
     int totalCols;
@@ -50,7 +50,7 @@ public class Table {
         }
         // Now only common variables are in allVar.
         // Add the rest of variables in order
-        // FIXME: New value will replace old value if key exists, but order should be maintained. If not as expected, fix me
+        // New value will replace old value if key exists, but order should be maintained.
         allNameAndType.putAll(nameVsType);
         allNameAndType.putAll(anotherTable.nameVsType);
 
@@ -120,16 +120,16 @@ public class Table {
 
         if (nameVsType.containsKey(op2)) {
             // both op1 and op2 are columns
-            if (nameVsType.get(op1) == "string" && nameVsType.get(op2) != "string") {
+            if (nameVsType.get(op1).equals("string") && !nameVsType.get(op2).equals("string")) {
                 return false;
             }
-            if (nameVsType.get(op2) == "string" && nameVsType.get(op1) != "string") {
+            if (nameVsType.get(op2).equals("string") && !nameVsType.get(op1).equals("string")) {
                 return false;
             }
             return true;
         } else {
             // op2 is a literal
-            if (nameVsType.get(op1) == "string") {
+            if (nameVsType.get(op1).equals("string")) {
                 return true;
             } else {
                 try {
@@ -247,7 +247,8 @@ public class Table {
     public Table subTable(String conds) {
 
         final Pattern MC = Pattern.compile("\\s*(\\w+\\s*(?:==|!=|>|<|>=|<=)\\s*\\w+)\\s*");
-        final Pattern SC = Pattern.compile("(\\w+)\\s*(==|!=|>|<|>=|<=)\\s*(\\w+)");
+        // single condition
+        final Pattern SC = Pattern.compile("(\\w+)\\s*(==|!=|>|<|>=|<=)\\s*\'?([a-zA-Z0-9.]+)\'?");
 
         Matcher m1 = SC.matcher(conds);
 

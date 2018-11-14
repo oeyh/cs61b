@@ -130,6 +130,7 @@ public class Database {
         try {
             in = new In("examples/" + tableFilename);
         } catch (IllegalArgumentException e) {
+            System.err.println("ERROR: TBL file not found: " + tableFilename);
             return "Fail to open table file. \n";
         }
 
@@ -252,7 +253,9 @@ public class Database {
         final Pattern COLS = Pattern.compile("\\s*\\w+(,\\s*\\w+\\s*)*");
         final Pattern COL_OPERATION = Pattern.compile("(\\w+)\\s*([-+*/])\\s*(\\w+)\\s+as\\s+(\\w+)");
 
+        // m1 is matched when specific column names are specified in select clause
         Matcher m1 = COLS.matcher(exprs);
+        // m2 is matched when column operations are specified in select clause
         Matcher m2 = COL_OPERATION.matcher(exprs);
 
 //        Pattern CONDS = Pattern.compile("(\\s*)(\\s+and\\s+[\\w\\s+\\-*/'<>=!.]+?)*");

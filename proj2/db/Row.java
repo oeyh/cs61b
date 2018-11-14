@@ -8,6 +8,7 @@ public class Row {
     private Map<String, String> nameVsType;
     private Set<String> columnNames;
     private int totalCols;
+    // Fixme: try bonded types instead of object
     private Map<String, Object> rowData;
 
     /** Constructor, given an existing table object and an array of values */
