@@ -149,18 +149,21 @@ public class Database {
         // create new table with column names and types
         Table newTable = new Table(nameAndTypes);
 
-
+        // read in values
         while (!in.isEmpty()) {
             String[] columnValues = in.readLine().split("\\s*,\\s*");
             Object[] columnValuesCast = new Object[columnValues.length];
 
             int k = 0;
             for (String name : nameAndTypes.keySet()) {
-                if (nameAndTypes.get(name).equals("int")) {
+                if (columnValues[k].equals("NaN") || columnValues[k].equals("NOVALUE")) {
+                    // for special values, do nothing
+                    columnValuesCast[k] = columnValues[k];
+                } else if (nameAndTypes.get(name).equals("int")) {
                     columnValuesCast[k] = Integer.parseInt(columnValues[k]);
                 } else if (nameAndTypes.get(name).equals("float")) {
                     columnValuesCast[k] = Float.parseFloat(columnValues[k]);
-                } else {
+                } else { // trim single quotes from strings
                     columnValuesCast[k] = columnValues[k].substring(1, columnValues[k].length()-1);
                 }
                 k += 1;

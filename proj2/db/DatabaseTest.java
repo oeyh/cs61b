@@ -7,6 +7,19 @@ import java.util.Scanner;
 
 public class DatabaseTest {
 
+    /** Test at commands level */
+    @Test
+    public void commandTest() {
+        Database db = new Database();
+        db.transact("load fans");
+        db.transact("load records");
+        db.transact("load teams");
+        db.transact("select Mascot, YearEstablished from teams where YearEstablished > 1942");
+        db.transact("create table seasonRatios as select City, Season, Wins/Losses as Ratio from teams, records");
+        db.transact("print seasonRatios");
+    }
+
+
     /** Test loadTable method */
     @Test
     public void loadTest() {

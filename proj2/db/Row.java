@@ -137,16 +137,24 @@ public class Row {
         List<String> orderedColumnValues = new ArrayList<>(totalCols);
 
         for (String name : columnNames) {
-            switch (nameVsType.get(name)) {
-                case "float":
-                    orderedColumnValues.add(String.format("%.3f", Float.parseFloat(rowData.get(name).toString())));
-                    break;
-                case "string":
-                    orderedColumnValues.add(String.format("'%s'", rowData.get(name).toString()));
-                    break;
-                default:
-                    orderedColumnValues.add(rowData.get(name).toString());
-                    break;
+
+            // For special values NaN and NOVALUE, output as is
+            String valueStr = rowData.get(name).toString();
+            if (valueStr.equals("NaN") || valueStr.equals("NOVALUE")) {
+                orderedColumnValues.add(valueStr);
+            } else {
+                // For normal values
+                switch (nameVsType.get(name)) {
+                    case "float": // for float, display 3 digits after decimal point
+                        orderedColumnValues.add(String.format("%.3f", Float.parseFloat(valueStr)));
+                        break;
+                    case "string": // for string, add single quotes
+                        orderedColumnValues.add(String.format("'%s'", valueStr));
+                        break;
+                    default: // for integer, display as is
+                        orderedColumnValues.add(valueStr);
+                        break;
+                }
             }
         }
 
